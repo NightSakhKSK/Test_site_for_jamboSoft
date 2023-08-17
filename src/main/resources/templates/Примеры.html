@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estimate Calculator</title>
+</head>
+<body>
+
+<div class="estimator_total__price">
+  <p class="estimator_total__title">총 예상 견적</p>
+  <button type="button" class="btn_estimator__reset" onclick="resetEstimate()">초기화</button>
+  <div class="estimator_total__num">
+    <strong class="estimator_price"><span id="total-medium-price">0</span> 만원</strong>
+  </div>
+</div>
+
+<button onclick="addAmount(100)">+100 만원</button>
+<button onclick="addAmount(200)">+200 만원</button>
+<button onclick="addAmount(300)">+300 만원</button>
+
+<script src="script.js"></script>
+</body>
+
+<script>
+  let currentAmount = 0;
+
+  function addAmount(amount) {
+    currentAmount += amount;
+    updateDisplay();
+  }
+
+  function resetEstimate() {
+    currentAmount = 0;
+    updateDisplay();
+  }
+
+  function updateDisplay() {
+    document.getElementById("total-medium-price").innerText = currentAmount;
+  }
+</script>
+</html>

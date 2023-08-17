@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>인테리어 견적 계산기,집닥</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta id="metaContentChange" http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="max-age=86400">
+    <title>Calculator</title>
+    <!-- Подключение Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Подключение стилей для вашего сайта -->
+    <link href="css-styles/common.css" rel="stylesheet">
+    <!-- Подключение стилей для вашего сайта -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="//cf.zipdoc.co.kr/zws/res/assets/plugins/jquery.ui/jquery-ui.min.css" rel="stylesheet" type="text/css">
+    <link href="//cf.zipdoc.co.kr/zws/res/assets/css/font.css?v=202305241200" rel="stylesheet" type="text/css">
+    <link href="//cf.zipdoc.co.kr/zws/res/assets/css/common.css?v=202305241200" rel="stylesheet" type="text/css">
+    <link href="//cf.zipdoc.co.kr/zws/res/assets/css/common_mobile.css?v=202305241200" rel="stylesheet" type="text/css">
+    <link href="//cf.zipdoc.co.kr/zws/res/assets/css/zipdoc_style.css?v=202305241200" rel="stylesheet" type="text/css">
+    <link href="//cf.zipdoc.co.kr/zws/res/assets/css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
+    <link href="//cf.zipdoc.co.kr/zws/res/assets/css/zipdoc_new.css?v=202305241200" rel="stylesheet" type="text/css">
+
+    <style>
+
+        li {
+            position: relative;
+        }
+
+        .gnb_sub_menu {
+            display: none;
+            position: absolute;
+            top: 100%;  /* это заставит меню появиться прямо под родительским элементом */
+            left: 0;   /* это заставит меню выровняться по левому краю родительского элемента */
+            z-index: 1000; /* чтобы меню было поверх других элементов */
+            /* Добавьте другие стили для оформления, если это необходимо */
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .gnb_area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gnb_wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .pc_top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gnb_menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .gnb_menu:after {
+            display: block;
+            clear: both;
+            content: ""
+        }
+
+        .gnb_menu, .header_menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .gnb_menu li, .header_menu li {
+            margin: 0 10px; /* Добавлено для отступа между элементами */
+        }
+
+        li::marker {
+            content: none;
+        }
+
+        a {
+            color: black; /* Устанавливает цвет ссылок в чёрный */
+            text-decoration: none; /* Убирает подчёркивание у ссылок */
+        }
+
+        /* Убирает эффекты при наведении и нажатии */
+        a:hover, a:focus, a:active {
+            color: black; /* Устанавливает цвет ссылок в чёрный при наведении и нажатии */
+            text-decoration: none; /* Убирает подчёркивание у ссылок при наведении и нажатии */
+        }
+
+        /* Убирает стандартный синий цвет у посещённых ссылок */
+        a:visited {
+            color: black;
+        }
+
+        /* Стили для кнопок */
+        .custom-button {
+            border: 1px solid lightblue; /* Добавлен стиль границы */
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* Светло-синий цвет при нажатии */
+        .custom-button:active {
+            background-color: lightblue;
+        }
+
+        .filter_button__toggle_line {
+            overflow: hidden;
+            width: auto;
+            height: 40px;
+            padding: 0 10px;
+            background: #fff;
+            border-radius: 4px;
+            border: 1px solid #aaa;
+            color: #3085ED;
+            font-weight: 400;
+            font-size: 14px;
+            text-align: center;
+            transition: background 0.2s ease;
+            letter-spacing: -0.5px;
+            line-height: 38px;
+        }
+
+        .filter_button__toggle_line:active {
+            border: 2px solid #3085ED;
+            color: #3085ED;
+            font-weight: 500;
+            line-height: 36px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .filter_button__toggle_line.selected {
+            border: 2px solid #3085ED;
+            color: #3085ED;
+            font-weight: 500;
+            line-height: 36px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+        }
+
+        .estimate_step__type {
+            align-items: start;
+        }
+
+        .select_space__list {
+            list-style-type: none; /* Убираем маркеры списка */
+            padding: 0; /* Убираем отступы */
+            margin: 0; /* Убираем отступы */
+        }
+
+        .select_space__list li {
+            margin-bottom: 10px; /* Добавляем небольшой отступ между кнопками */
+        }
+
+        .tab_select_toggle button {
+            background-color: white;
+            color: black;
+            border: 2px solid transparent;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .tab_select_toggle button.active {
+            background-color: #00BFFF;
+            color: white;
+            border-color: #00BFFF;
+        }
+    </style>
+</head>
+<body>
+
+<div class="row container-fluid text_center justify-content-center"
+     style="margin-top: 0.25%; height: 10vh;">
+    <header class="gnb_area" style="top: 0px;">
+        <div class="gnb_wrap">
+            <div class="pc_top d-flex flex-row container-fluid">
+
+                <nav class="d-flex flex-row container-fluid">
+
+                    <ul class="gnb_menu d-flex flex-row">
+                        <li class="">
+                            <h1 class="logo">
+                                <a href="https://zipdoc.co.kr/" class="go_main_pc">
+                                    <img src="//cf.zipdoc.co.kr/zws/res/assets/images/zipdoc_v35/common/img_logo@2x.png"
+                                         alt="집닥">
+                                </a>
+                            </h1>
+                        </li>
+                        <li class="" margin-right 10px>
+                            <a class="interiorBtn" href="https://zipdoc.co.kr/product/construction/list"
+                               data-path="/product/construction/">시공사례</a>
+                        </li>
+                        <li class="">
+                            <a class="interiorBtn" href="https://zipdoc.co.kr/product/resident/items"
+                               data-path="/product/resident/items/">공간아이디어</a>
+                        </li>
+                        <li>
+                            <a class="interiorBtn" href="https://zipdoc.co.kr/partner/list/index/page"
+                               data-path="/partner/">시공전문가</a>
+                        </li>
+                        <li class="">
+                            <a class="interiorBtn" href="https://zipdoc.co.kr/postscript?category_cd=90"
+                               data-path="/postscript/">고객후기</a>
+                        </li>
+                        <li class="">
+                            <a class="go_story_pc dropdown-toggle" href="#" onclick="toggleDropdown('storyDropdown')">집닥스토리</a>
+                            <div class="gnb_sub_menu" id="storyDropdown" style="display: none;">
+                                <ul>
+                                    <li>
+                                        <a class="go_story_tip_pc"
+                                           href="https://zipdoc.co.kr/story/list?magazineType=1">인테리어
+                                            팁</a>
+                                    </li>
+                                    <li>
+                                        <a class="go_story_trend_pc"
+                                           href="https://zipdoc.co.kr/story/list?magazineType=5">인테리어
+                                            트렌드</a>
+                                    </li>
+                                    <li>
+                                        <a class="go_story_field_pc"
+                                           href="https://zipdoc.co.kr/story/list?magazineType=2">집닥맨
+                                            현장소식</a>
+                                    </li>
+                                    <li>
+                                        <a class="go_story_field_pc"
+                                           href="https://zipdoc.co.kr/benefit/eventList">이벤트</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <ul class="header_menu d-flex flex-row">
+
+                        <li class="">
+                            <a href="javascript:;" class="header_button__mypage dropdown-toggle"
+                               onclick="window.location.href='/login'">로그인</a>
+                            <div class="header_sub_menu" id="loginDropdown" style="display: none;">
+
+                            </div>
+                        </li>
+                        <li><a href="https://zipdoc.co.kr/customer/faq" class="header_button__customer">고객센터</a></li>
+                        <li>
+                            <button type="button" class="custom-button">검색</button>
+                        </li>
+                    </ul>
+
+                </nav>
+            </div>
+        </div>
+
+    </header>
+
+    <link rel="stylesheet" type="text/css"
+          href="//cf.zipdoc.co.kr/zws/res/assets/css/expect_estimate.css?v=202305241200">
+
+    <div id="app">
+        <div class="estimator_wrap">
+            <div class="estimator_content">
+                <div class="estimate_step__info"><h2 class="estimate_info__title text_hidden">견적계산기</h2>
+                    <div class="estimate_info__desc">예상 비용은 집닥 영수증 기준으로 제공되며, 시공 자재와 상황에 따라 변경될 수 있습니다.</div>
+                </div>
+                <section class="estimator_step_wrap estimator_step01"><h2 class="estimate_step__head">
+                    <span>Step 1</span><span class="step_head__title">기본 정보를 입력해 주세요.</span></h2>
+                    <div class="estimate_step__type"><h3 class="step_head__sub">건물 유형</h3>
+                        <ul class="select_space__list">
+                            <li>
+                                <button type="button" class="filter_button__toggle_line" data-amount='100'
+                                        data-group="group1"
+                                        onclick="toggleSingleChoiceAmount(this, 100, 'group1')"><span>아파트</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="filter_button__toggle_line" data-amount='200'
+                                        data-group="group1"
+                                        onclick="toggleSingleChoiceAmount(this, 200, 'group1')"><span>빌라</span></button>
+                            </li>
+                            <li>
+                                <button type="button" class="filter_button__toggle_line" data-amount='300'
+                                        data-group="group1"
+                                        onclick="toggleSingleChoiceAmount(this, 300, 'group1')"><span>주택</span></button>
+                            </li>
+                            <li>
+                                <button type="button" class="filter_button__toggle_line" data-amount='400'
+                                        data-group="group1"
+                                        onclick="toggleSingleChoiceAmount(this, 400, 'group1')"><span>오피스텔</span>
+                                </button>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="estimate_step__num"><h3 class="step_head__sub">평수(공급면적)</h3>
+                        <div class="estimate_step__input">
+                            <div class="estimate_input input-unit"><input id="estimate_space" maxlength="3" type="tel"
+                                                                          pattern="[0-9]*" inputmode="numeric"
+                                                                          placeholder="0" autocomplete="off"
+                                                                          class="number_only_textinput"> <span>평</span>
+                            </div>
+                        </div>
+                        <div aria-label="평수 단위 선택" data-current="p" class="tab_select_toggle">
+                            <button type="button" class="custom-button" onclick="toggleUnitConversion()">평</button>
+                            <button type="button" class="custom-button" onclick="toggleUnitConversion()">㎡</button>
+                        </div>
+                    </div>
+                </section>
+                <section id="estimate_detail_section" class="estimator_step_wrap estimator_step02"><h2
+                        class="estimate_step__head"><span>Step 2</span><span
+                        class="step_head__title">상세 공사항목을 선택해 주세요.</span></h2>
+                    <button type="button" class="btn-check-text" onclick="togglePreferredOptions()">고객님들이 선호하는 인테리어 선택
+                    </button>
+                    <div class="estimate_step__part">
+                        <div class="estimate_part">
+                            <div class="estimate_part__info">
+                                <div class="title_group_frontdoor"><h3 class="estimate_part__title">현관</h3> <!---->
+                                </div>
+                            </div>
+                            <div class="filter_group">
+                                <div class="estimate__filter_group"><!----> <!---->
+                                    <div class="filter_btn__list">
+
+                                        <button id="frontDoor1" type="button" class="filter_button__toggle_line" data-amount="111"
+                                                onclick="toggleAmount(this)">
+                                            현관 신발장
+                                        </button>
+                                        <button id="frontDoor2" type="button" class="filter_button__toggle_line" data-amount="222"
+                                                onclick="toggleAmount(this)">
+                                            타일
+                                        </button>
+                                        <button id="frontDoor3" type="button" class="filter_button__toggle_line" data-amount="333"
+                                                onclick="toggleAmount(this)">
+                                            가벽 설치
+                                        </button>
+                                        <button id="frontDoor4" type="button" class="filter_button__toggle_line" data-amount="444"
+                                                onclick="toggleAmount(this)">
+                                            현관 중문
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estimate_part">
+                            <div class="estimate_part__info">
+                                <div class="title_group_wallpaper"><h3 class="estimate_part__title">도배/벽</h3>
+                                    <button type="button" class="estimate_part__btn"><span
+                                            class="text_hidden">도배/벽 자세히 보기</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="filter_group">
+                                <div class="estimate__filter_group">
+                                    <div class="filter_btn__list">
+                                        <button id ="Wall1" type="button" class="filter_button__toggle_line" data-amount='101'
+                                                data-group="group2"
+                                                onclick="toggleSingleChoiceAmount(this, 101, 'group2')">
+                                            전체 실크
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='202'
+                                                data-group="group2"
+                                                onclick="toggleSingleChoiceAmount(this, 202, 'group2')">
+                                            전체 합지
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='303'
+                                                data-group="group2"
+                                                onclick="toggleSingleChoiceAmount(this, 303, 'group2')">
+                                            거실 실크+방 합지
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='404'
+                                                data-group="group2"
+                                                onclick="toggleSingleChoiceAmount(this, 404, 'group2')">
+                                            기타
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="estimate__filter_group"><!----> <p class="filter_sub__title">
+                                    아트월
+                                    <!----></p>
+                                    <div class="filter_btn__list">
+                                        <button type="button" class="filter_button__toggle_line" data-amount="505"
+                                                onclick="toggleAmount(this)">
+                                            추가
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estimate_part">
+                            <div class="estimate_part__info">
+                                <div class="title_group_bottom"><h3 class="estimate_part__title">바닥</h3>
+                                    <button type="button" class="estimate_part__btn"><span
+                                            class="text_hidden">바닥 자세히 보기</span></button>
+                                </div>
+                            </div>
+                            <div class="filter_group">
+                                <div class="estimate__filter_group"><!----> <!---->
+                                    <div class="filter_btn__list">
+                                        <button id ="floor1" type="button" class="filter_button__toggle_line" data-amount='10'
+                                                data-group="group3"
+                                                onclick="toggleSingleChoiceAmount(this, 10, 'group3')">
+                                            강마루
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='20'
+                                                data-group="group3"
+                                                onclick="toggleSingleChoiceAmount(this, 20, 'group3')">
+                                            장판
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='30'
+                                                data-group="group3"
+                                                onclick="toggleSingleChoiceAmount(this, 30, 'group3')">
+                                            포세린 타일
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='40'
+                                                data-group="group3"
+                                                onclick="toggleSingleChoiceAmount(this, 40, 'group3')">
+                                            기타
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estimate_part">
+                            <div class="estimate_part__info">
+                                <div class="title_group_molding"><h3 class="estimate_part__title">몰딩</h3>
+                                    <button type="button" class="estimate_part__btn"><span
+                                            class="text_hidden">몰딩 자세히 보기</span></button>
+                                </div>
+                            </div>
+                            <div class="filter_group">
+                                <div class="estimate__filter_group"><!----> <!---->
+                                    <div class="filter_btn__list">
+                                        <button id="molding1" type="button" class="filter_button__toggle_line" data-amount='60'
+                                                data-group="group4"
+                                                onclick="toggleSingleChoiceAmount(this, 60, 'group4')">
+                                            전체 교체
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='70'
+                                                data-group="group4"
+                                                onclick="toggleSingleChoiceAmount(this, 70, 'group4')">
+                                            부분 교체
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='80'
+                                                data-group="group4"
+                                                onclick="toggleSingleChoiceAmount(this, 80, 'group4')">
+                                            필름만 시공
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estimate_part">
+                            <div class="estimate_part__info">
+                                <div class="title_group_veranda"><h3 class="estimate_part__title">발코니/샷시</h3>
+                                    <button  type="button" class="estimate_part__btn"><span
+                                            class="text_hidden">발코니/샷시 자세히 보기</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="filter_group">
+                                <div class="estimate__filter_group"><!----> <!---->
+                                    <div class="filter_btn__list">
+                                        <button id="balcony1" type="button" class="filter_button__toggle_line" data-amount='1001'
+                                                data-group="group5"
+                                                onclick="toggleSingleChoiceAmount(this, 1001, 'group5')">
+                                            전체 교체
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='1002'
+                                                data-group="group5"
+                                                onclick="toggleSingleChoiceAmount(this, 1002, 'group5')">
+                                            부분 교체
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='1003'
+                                                data-group="group5"
+                                                onclick="toggleSingleChoiceAmount(this, 1003, 'group5')">
+                                            필름만 시공
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="estimate__filter_group"><!----> <p class="filter_sub__title">
+                                    확장
+                                    <span class="filter_sub__desc">
+                            다중선택 가능
+                          </span></p>
+                                    <div class="filter_btn__list">
+                                        <button type="button" class="filter_button__toggle_line" data-amount='1004'
+                                                onclick="toggleAmount(this)">
+                                            거실 확장
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='1005'
+                                                onclick="toggleAmount(this)">
+                                            방 확장
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='1006'
+                                                onclick="toggleAmount(this)">
+                                            발코니 단올림
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estimate_part">
+                            <div class="estimate_part__info">
+                                <div class="title_group_kitchen"><h3 class="estimate_part__title">주방</h3>
+                                    <button type="button" class="estimate_part__btn"><span
+                                            class="text_hidden">주방 자세히 보기</span></button>
+                                </div>
+                            </div>
+                            <div class="filter_group">
+                                <div class="estimate__filter_group"><!----> <!---->
+                                    <div class="filter_btn__list">
+                                        <button id="kitchen1" type="button" class="filter_button__toggle_line" data-amount='1'
+                                                data-group="group6"
+                                                onclick="toggleSingleChoiceAmount(this, 1, 'group6')">
+                                            전체 교체(사제)
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='2'
+                                                data-group="group6"
+                                                onclick="toggleSingleChoiceAmount(this, 2, 'group6')">
+                                            전체 교체(브랜드)
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='3'
+                                                data-group="group6"
+                                                onclick="toggleSingleChoiceAmount(this, 3, 'group6')">
+                                            필름만 시공
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='4'
+                                                data-group="group6"
+                                                onclick="toggleSingleChoiceAmount(this, 4, 'group6')">
+                                            타일만 시공
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='5'
+                                                data-group="group6"
+                                                onclick="toggleSingleChoiceAmount(this, 5, 'group6')">
+                                            기타
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="estimate__filter_group"><!----> <p class="filter_sub__title">
+                                    아일랜드 식탁
+                                    <!----></p>
+                                    <div class="filter_btn__list">
+                                        <button type="button" class="filter_button__toggle_line" data-amount='6'
+                                                onclick="toggleAmount(this)">
+                                            추가
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estimate_part">
+                            <div class="estimate_part__info">
+                                <div class="title_group_bath"><h3 class="estimate_part__title">욕실</h3>
+                                    <button type="button" class="estimate_part__btn"><span
+                                            class="text_hidden">욕실 자세히 보기</span></button>
+                                </div>
+                            </div>
+                            <div class="filter_group">
+                                <div class="estimate__filter_group"><p class="filter_sub__title">욕실 개수</p>
+                                    <div class="filter_btn__list">
+                                        <button type="button" class="filter_button__toggle_line" data-amount ='0' data-group="bathCount1" onclick="setBathroomCount(this, 0)">
+                                            선택 안함
+                                        </button>
+                                        <button id="bathQty1" type="button" class="filter_button__toggle_line"  data-amount ='1' data-group="bathCount1" onclick="setBathroomCount(this, 1)">
+                                            1개
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line"  data-amount ='2' data-group="bathCount1" onclick="setBathroomCount(this, 2)">
+                                            2개
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line"  data-amount ='3' data-group="bathCount1" onclick="setBathroomCount(this, 3)">
+                                            3개
+                                        </button>
+                                    </div>
+                            <p class="filter_sub__title">시공 항목</p> <!---->
+                            <div class="filter_btn__list">
+                                <button id ="bathroomType1" type="button" class="filter_button__toggle_line" data-amount ='3' data-group = 'group7' onclick="toggleSingleChoiceAmountBath(this, 3, 'group7')">
+                                    전체 교체(일반)
+                                </button>
+                                <button type="button" class="filter_button__toggle_line" data-amount ='4' data-group = 'group7' onclick="toggleSingleChoiceAmountBath(this, 4, 'group7')">
+                                    도기만 교체
+                                </button>
+                                <button type="button" class="filter_button__toggle_line" data-amount ='5' data-group = 'group7' onclick="toggleSingleChoiceAmountBath(this, 5, 'group7')">
+                                    타일만 교체
+                                </button>
+                                <button type="button" class="filter_button__toggle_line" data-amount ='6' data-group = 'group7' onclick="toggleSingleChoiceAmountBath(this, 6, 'group7')">
+                                    기타
+                                </button>
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estimate_part">
+                            <div class="estimate_part__info">
+                                <div class="title_group_door"><h3 class="estimate_part__title">문</h3>
+                                    <button type="button" class="estimate_part__btn"><span
+                                            class="text_hidden">문 자세히 보기</span></button>
+                                </div>
+                            </div>
+
+
+                            <div class="filter_group">
+                                <div class="estimate__filter_group"><!----> <!---->
+                                    <div class="filter_btn__list">
+                                        <button id ="door1" type="button" class="filter_button__toggle_line" data-amount ='800' data-group = 'group9' onclick="toggleSingleChoiceAmount(this, 800, 'group9')">
+                                            전체 교체
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount ='900' data-group = 'group9' onclick="toggleSingleChoiceAmount(this, 900, 'group9')">
+                                            부분 교체
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount ='1000' data-group = 'group9' onclick="toggleSingleChoiceAmount(this, 1000, 'group9')">
+                                            필름만 시공
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="estimate__filter_group"><!----> <p class="filter_sub__title">
+                                    기타
+                                    <span class="filter_sub__desc">
+                            다중선택 가능
+                          </span></p>
+                                    <div class="filter_btn__list">
+                                        <button id ="doorType1" type="button" class="filter_button__toggle_line" data-amount ='400' onclick="toggleAmount(this)">
+                                            터닝 도어
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount ='500' onclick="toggleAmount(this)">
+                                            폴딩 도어
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estimate_part">
+                            <div class="estimate_part__info">
+                                <div class="title_group_light"><h3 class="estimate_part__title">조명</h3>
+                                    <button type="button" class="estimate_part__btn"><span
+                                            class="text_hidden">조명 자세히 보기</span></button>
+                                </div>
+                            </div>
+                            <div class="filter_group">
+                                <div class="estimate__filter_group"><!----> <!---->
+                                    <div class="filter_btn__list">
+                                        <button id="light1" type="button" class="filter_button__toggle_line" data-amount='500'
+                                                data-group="group8"
+                                                onclick="toggleSingleChoiceAmount(this, 500, 'group8')">
+                                            전체 교체
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='600'
+                                                data-group="group8"
+                                                onclick="toggleSingleChoiceAmount(this, 600, 'group8')">
+                                            등,스위치만 교체
+                                        </button>
+                                        <button type="button" class="filter_button__toggle_line" data-amount='700'
+                                                data-group="group8"
+                                                onclick="toggleSingleChoiceAmount(this, 700, 'group8')">
+                                            전기만 시공
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estimate_part">
+                            <div class="estimate_part__info">
+                                <div class="title_group_furniture"><h3 class="estimate_part__title">가구공사</h3>
+                                    <button type="button" class="estimate_part__btn"><span
+                                            class="text_hidden">가구공사 자세히 보기</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="filter_group">
+                                <div class="estimate__filter_group">
+                                    <div class="filter_btn__list">
+                                        <button type="button" class="filter_button__toggle_line" data-amount ="123" onclick="toggleAmount(this)">
+                                            붙박이장
+                                        </button>
+                                        <button id ="furniture2" type="button" class="filter_button__toggle_line" data-amount ='124' onclick="toggleAmount(this)">
+                                            키큰장
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="estimate_result">
+                <div class="estimate_step__info"><h2 class="estimate_info__title">견적계산기</h2>
+                    <div class="estimate_info__desc">예상 비용은 집닥 영수증 기준으로 제공되며, 시공 자재와 상황에 따라 변경될 수 있습니다.</div>
+                </div>
+                <div class="estimator_total_wrap">
+                    <div class="estimator_total__head">
+                        <div class="estimator_tab__menu">
+                            <button type="button" class="">실속견적</button>
+                            <button type="button" class="active">표준견적</button>
+                            <button type="button" class="">고급견적</button>
+                            <span class="tab_active__bg"></span></div>
+                        <button type="button" class="estimator_total__help"><i></i><span class="text_hidden">도움말</span>
+                        </button>
+                    </div>
+                    <div class="estimator_tab__content"><p class="estimate_empty">선택한 상세 공사항목이 없습니다.</p></div>
+                    <div class="estimator_total__price"><p class="estimator_total__title">총 예상 견적</p>
+                        <button type="button" class="btn_estimator__reset" onclick="resetEstimate()">초기화</button>
+                        <div class="estimator_total__num"><strong class="estimator_price" style="display: none;"><span
+                                id="total-min-price">0</span> 만원</strong>
+
+
+                            <strong class="estimator_price"><span id="total-medium-price">0</span> 만원</strong>
+
+
+                            </strong> <strong class="estimator_price" style="display: none;"><span
+                                    id="total-max-price">0</span> 만원</strong></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function toggleDropdown(dropdownId) {
+        var dropdown = document.getElementById(dropdownId);
+        if (dropdown.style.display === "none" || dropdown.style.display === "") {
+            dropdown.style.display = "block";
+        } else {
+            dropdown.style.display = "none";
+        }
+    }
+
+    $(document).ready(function () {
+        $('#calculateButton').on('click', function () {
+            // Получите значение из поля ввода
+            var quantity = $('#quantity').val();
+
+            // Рассчитайте стоимость (предположим, что стоимость одной единицы равна 100)
+            var cost = quantity * 100;
+
+            // Выведите рассчитанную стоимость
+            $('#totalCost').text(cost);
+        });
+    });
+
+
+</script>
+
+<script>
+    let currentAmount = 0;
+
+    function toggleAmount(button) {
+        const amount = parseInt(button.getAttribute('data-amount'));
+
+        if (button.classList.contains('selected')) {
+            // Если кнопка уже активна, вычитаем её значение из общей суммы
+            currentAmount -= amount;
+            button.classList.remove('selected');
+        } else {
+            // Если кнопка неактивна, добавляем её значение к общей сумме
+            currentAmount += amount;
+            button.classList.add('selected');
+        }
+
+        updateDisplay();
+    }
+
+    function resetEstimate() {
+        currentAmount = 0;
+        bathroomCount = 0; // также сбрасываем количество ванных комнат
+
+        // Выбираем все кнопки с классом .filter_button__toggle_line
+        const buttons = document.querySelectorAll('.filter_button__toggle_line');
+        buttons.forEach(button => {
+            button.classList.remove('selected'); // убираем класс 'selected' у всех кнопок
+            button.classList.remove('active');   // если у вас есть кнопки с классом 'active', убираем и его
+        });
+
+        updateDisplay();
+    }
+
+    function toggleSingleChoiceAmount(button, amount, group) {
+        // Проверяем, активна ли кнопка
+        const isActive = button.classList.contains('selected');
+
+        // Находим все кнопки внутри этой группы
+        const allButtons = document.querySelectorAll(`[data-group="${group}"]`);
+
+        // Если кнопка уже активна, отжимаем её
+        if (isActive) {
+            button.classList.remove('selected');
+            currentAmount -= amount;
+        } else {
+            // Если кнопка не активна, отжимаем все кнопки в группе
+            allButtons.forEach(btn => {
+                if (btn.classList.contains('selected')) {
+                    currentAmount -= parseInt(btn.getAttribute('data-amount'));
+                    btn.classList.remove('selected');
+                }
+            });
+
+            // И делаем активной текущую кнопку
+            button.classList.add('selected');
+            currentAmount += amount;
+        }
+
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        document.getElementById("total-medium-price").innerText = currentAmount;
+    }
+
+    let bathroomAmount = 0;
+
+    function setBathroomCount(button, count) {
+        // Определите группу текущей кнопки
+        const group = button.getAttribute('data-group');
+
+        // Находим все кнопки в этой группе
+        const groupButtons = document.querySelectorAll(`[data-group="${group}"]`);
+        groupButtons.forEach(btn => btn.classList.remove('selected'));
+
+        // Установите новое количество ванных комнат
+        bathroomCount = count;
+
+        // Сделайте текущую кнопку активной
+        button.classList.add('selected');
+    }
+
+    function toggleSingleChoiceAmountBath(button, amount, group) {
+        // Проверяем, активна ли кнопка
+        const isActive = button.classList.contains('selected');
+
+        // Находим все кнопки внутри этой группы
+        const allButtons = document.querySelectorAll(`[data-group="${group}"]`);
+
+        // Если кнопка уже активна, отжимаем её
+        if (isActive) {
+            button.classList.remove('selected');
+            currentAmount -= bathroomAmount; // вычитаем предыдущую стоимость ванных комнат
+        } else {
+            // Если кнопка не активна, отжимаем все кнопки в группе
+            allButtons.forEach(btn => {
+                if (btn.classList.contains('selected')) {
+                    currentAmount -= bathroomAmount; // вычитаем предыдущую стоимость ванных комнат
+                    btn.classList.remove('selected');
+                }
+            });
+
+            // И делаем активной текущую кнопку
+            button.classList.add('selected');
+            bathroomAmount = amount * bathroomCount;
+            currentAmount += bathroomAmount; // добавляем новую стоимость ванных комнат
+        }
+
+        // Обновляем отображение
+        updateDisplay();
+    }
+
+
+    function toggleUnitConversion() {
+        const input = document.getElementById('estimate_space');
+        const unitSpan = input.nextElementSibling; // Получаем следующий элемент после input, который является <span>
+        let value = parseFloat(input.value);
+
+        // Проверка на NaN и 0
+        if (isNaN(value)) {
+            input.value = "0";
+            return;
+        }
+
+        const unitButtons = document.querySelectorAll('.tab_select_toggle button');
+        const pyungButton = unitButtons[0];
+        const m2Button = unitButtons[1];
+
+        if (pyungButton.classList.contains('selected')) {
+            // Если текущая единица измерения - пён, конвертируем в м2
+            input.value = (value * 3.3058).toFixed(2); // Округляем до двух знаков после запятой
+            pyungButton.classList.remove('selected');
+            m2Button.classList.add('selected');
+            unitSpan.textContent = "㎡"; // Меняем текст на "㎡"
+        } else {
+            // Если текущая единица измерения - м2, конвертируем в пён
+            input.value = (value / 3.3058).toFixed(2); // Округляем до двух знаков после запятой
+            m2Button.classList.remove('selected');
+            pyungButton.classList.add('selected');
+            unitSpan.textContent = "평"; // Меняем текст на "평"
+        }
+    }
+
+
+
+
+
+    document.querySelector('.tab_select_toggle').addEventListener('click', function(event) {
+        const target = event.target;
+        const input = document.getElementById('estimate_space');
+        const unitSpan = document.querySelector('._unit_form');
+
+        if (target.tagName === 'BUTTON') {
+            const buttons = document.querySelectorAll('.tab_select_toggle button');
+            buttons.forEach(button => button.classList.remove('active'));
+            target.classList.add('active');
+
+            if (target.textContent === '평') {
+                input.value = convertToPyung(parseFloat(unitSpan.textContent)).toFixed(2);
+                unitSpan.textContent = convertToM2(parseFloat(input.value)).toFixed(2);
+            } else {
+                unitSpan.textContent = convertToPyung(parseFloat(input.value)).toFixed(2);
+                input.value = convertToM2(parseFloat(unitSpan.textContent)).toFixed(2);
+            }
+        }
+    });
+
+    let preferredOptionsSelected = false;
+    function togglePreferredOptions() {
+        const preferredButtons = [
+            document.querySelector('#bathQty1'),
+            document.querySelector('#bathroomType1'),
+            document.querySelector('#frontDoor1'),
+            document.querySelector('#frontDoor2'),
+            document.querySelector('#frontDoor3'),
+            document.querySelector('#frontDoor4'),
+            document.querySelector('#Wall1'),
+            document.querySelector('#floor1'),
+            document.querySelector('#molding1'),
+            document.querySelector('#balcony1'),
+            document.querySelector('#kitchen1'),
+            document.querySelector('#door1'),
+            document.querySelector('#doorType1'),
+            document.querySelector('#light1'),
+            document.querySelector('#furniture2'),
+        ];
+        if (preferredOptionsSelected) {
+            // Если опции уже были выбраны, сбросьте их
+            preferredButtons.forEach(button => {
+                if (button && button.classList.contains('selected')) {
+                    button.click();
+                }
+            });
+            preferredOptionsSelected = false;
+        } else {
+            // Иначе выберите предпочтительные опции
+            preferredButtons.forEach(button => {
+                if (button && !button.classList.contains('selected')) {
+                    button.click();
+                }
+            });
+            preferredOptionsSelected = true;
+        }
+
+        updateDisplay();
+    }
+
+
+    // Привязываем функцию selectPreferredOptions к вашей кнопке
+    document.querySelector('.btn-check-text').addEventListener('click', selectPreferredOptions);
+
+
+</script>
+</body>
+
+
+<!-- Подключение скриптов -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+
+</body>
+</html>

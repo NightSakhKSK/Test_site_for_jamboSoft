@@ -1,0 +1,99 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+
+
+<head>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+</head>
+<title>Admin panel</title>
+
+
+<body style="background-color:#f9fafa">
+
+<!--Top navbar-->
+<div class="container-fluid ">
+  <dl class="row" style="padding: 0.5%; background-color: #353a3f">
+    <div class="col-11 text-left" style="margin-top: 0.2%">
+      <ul class="list-inline h5">
+        <li class="list-inline-item text-white text-strong navbar-brand"
+            th:utext="${#authentication.name}"></li>
+        <li class="list-inline-item text-white navbar-brand">with roles:</li>
+        <li class="list-inline-item text-white navbar-brand" th:utext="${#authentication.authorities}">
+          <strong></strong></li>
+      </ul>
+    </div>
+    <div style="margin-top: 0.43%"  class="col-1 h6">
+      <a class="navbar-brand text-white text-right" href="/logout">Logout</a>
+    </div>
+  </dl>
+</div>
+<!--Top navbar-->
+
+<div class="container-fluid ">
+  <div class="row" style="background-color: #f8f9fa">
+    <!--Left Sidebar-->
+    <div class="col-2 text-left" style="background-color: #ffffff; min-height: 100vh">
+      <div class="d-flex align-items-start">
+        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+          <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true" style="min-width: 420%">USER
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--Left Sidebar-->
+    <!--Main Content-->
+    <div class="col-10">
+      <div class="tab-content" id="v-pills-tabContent">
+
+
+        <!--Single User Table-->
+        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+          <h1>User information-page</h1>
+
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">Username</th>
+              <th scope="col">Roles</th>
+            </tr>
+            </thead>
+            <tbody id="oneUserBody">
+
+            </tbody>
+          </table>
+        </div>
+        <!--Single User Table-->
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+<script src="/js/user.js"></script>
+
+
+</body>
+</html>
